@@ -14,6 +14,8 @@ import { DemoModal } from "@/components/site/DemoModal";
 import { AlexChat } from "@/components/site/AlexChat";
 import { Reveal } from "@/components/site/Reveal";
 import { startVapi, VAPI_ASSISTANT_ID } from "@/lib/vapi";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteFooter } from "@/components/site/SiteFooter";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -227,7 +229,7 @@ function Index() {
   const [bookingOpen, setBookingOpen] = useState(false);
   return (
     <div className="min-h-screen bg-background text-charcoal">
-      <Header onBook={() => setBookingOpen(true)} />
+      <SiteHeader bookHref="#estimate" />
       <Hero onBook={() => setBookingOpen(true)} />
       <TrustBar />
       <EstimatorSection onBook={() => setBookingOpen(true)} />
@@ -239,7 +241,7 @@ function Index() {
       <FoundingBanner />
       <EmergencyBanner />
       <FinalCTA onBook={() => setBookingOpen(true)} />
-      <Footer />
+      <SiteFooter />
       <VoiceWidget />
       <DemoTab />
       <AlexChat open={bookingOpen} onClose={() => setBookingOpen(false)} />
@@ -247,64 +249,6 @@ function Index() {
   );
 }
 
-function Header({ onBook }: { onBook: () => void }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const close = () => setMenuOpen(false);
-  return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-border">
-      <div className="max-w-7xl mx-auto px-5 lg:px-8 h-16 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2">
-          <div className="size-9 rounded-lg bg-turquoise flex items-center justify-center text-white font-bold">
-            <AirVent className="size-5" />
-          </div>
-          <span className="font-display text-xl font-semibold text-charcoal">ABC HVAC</span>
-        </a>
-
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-charcoal/80">
-          <a href="#services" className="hover:text-turquoise transition">Services</a>
-          <a href="#estimate" className="hover:text-turquoise transition">Get Estimate</a>
-          <a href="#who" className="hover:text-turquoise transition">Who We Serve</a>
-          <a href="#area" className="hover:text-turquoise transition">Service Area</a>
-          <button
-            onClick={() => window.dispatchEvent(new Event("open-voice-widget"))}
-            className="hover:text-turquoise transition"
-          >
-            AI Assistant
-          </button>
-        </nav>
-
-        <div className="flex items-center gap-3">
-          <a href={`tel:${PHONE}`} className="hidden md:flex items-center gap-2 text-sm font-semibold text-charcoal hover:text-turquoise transition">
-            <Phone className="size-4 text-turquoise" /> {PHONE}
-          </a>
-          <button
-            onClick={onBook}
-            className="bg-turquoise text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:opacity-90 transition shadow-turquoise"
-          >
-            Book Service
-          </button>
-          <button
-            onClick={() => setMenuOpen((o) => !o)}
-            aria-label="Toggle menu"
-            className="md:hidden flex items-center justify-center size-9 rounded-lg border border-border text-charcoal hover:bg-secondary transition"
-          >
-            {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
-        </div>
-      </div>
-
-      {menuOpen && (
-        <div className="md:hidden bg-white border-t border-border px-5 py-4 flex flex-col gap-4 text-sm font-medium text-charcoal/80">
-          <a href="#services" onClick={close} className="hover:text-turquoise transition">Services</a>
-          <a href="#estimate" onClick={close} className="hover:text-turquoise transition">Get Estimate</a>
-          <a href="#who" onClick={close} className="hover:text-turquoise transition">Who We Serve</a>
-          <a href="#area" onClick={close} className="hover:text-turquoise transition">Service Area</a>
-          <a href={`tel:${PHONE}`} onClick={close} className="hover:text-turquoise transition">{PHONE}</a>
-        </div>
-      )}
-    </header>
-  );
-}
 
 function Hero({ onBook }: { onBook: () => void }) {
   const [slide, setSlide] = useState(0);
@@ -714,37 +658,3 @@ function FinalCTA({ onBook }: { onBook: () => void }) {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="bg-charcoal border-t border-white/10 text-white/80">
-      <div className="max-w-7xl mx-auto px-5 lg:px-8 py-14 grid md:grid-cols-3 gap-10">
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <div className="size-9 rounded-lg bg-turquoise flex items-center justify-center text-white font-bold">
-              <AirVent className="size-5" />
-            </div>
-            <span className="font-display text-xl font-semibold text-white">ABC HVAC</span>
-          </div>
-          <p className="italic text-white/70">"Comfort Done Right. Every Time."</p>
-        </div>
-        <div>
-          <h4 className="text-white font-semibold mb-3 text-sm tracking-wider uppercase">Explore</h4>
-          <ul className="space-y-2 text-sm">
-            {["Services", "Get Estimate", "Who We Serve", "Service Area", "Emergency Service", "Contact"].map((l) => (
-              <li key={l}><a href="#" className="hover:text-turquoise transition">{l}</a></li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h4 className="text-white font-semibold mb-3 text-sm tracking-wider uppercase">Contact</h4>
-          <a href={`tel:${PHONE}`} className="text-sm flex items-center gap-2 mb-2 hover:text-turquoise transition"><Phone className="size-4 text-turquoise" /> {PHONE}</a>
-          <a href={`mailto:${EMAIL}`} className="text-sm flex items-center gap-2 hover:text-turquoise transition"><Mail className="size-4 text-turquoise" /> {EMAIL}</a>
-          <p className="text-xs text-white/40 mt-4">Licensed & Insured · DC · MD · VA</p>
-        </div>
-      </div>
-      <div className="border-t border-white/10 py-5 text-center text-xs text-white/50">
-        © 2026 ABC HVAC. All rights reserved. Licensed & Insured. Serving the DMV.
-      </div>
-    </footer>
-  );
-}
